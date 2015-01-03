@@ -1,0 +1,7 @@
+1.  User needs a clear and simple method to create,  view and edit tickets. 
+2. Email updates for both myself and the customer for any tickets changes. 
+3.  Time and date stamp for ticket updates,  non editable for them but editable for us. 
+4.  Ability to upload photos and share them both ways. 
+5.  Possible integration with remote software and payment systems like square. 
+6.  Possible integration with google calendar for booking (automatically not allowing calls booked for times that are already booked and automatically adding calendar entries) 
+7. Give the user an option to be included in a mailing list to receive important updates or important information and sales from us.
