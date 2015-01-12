@@ -13,7 +13,7 @@
 
 App::before(function($request)
 {
-	//
+
 });
 
 
@@ -53,6 +53,8 @@ Route::filter('auth.basic', function()
 {
 	return Auth::basic();
 });
+
+Route::when('/*', 'auth');
 
 /*
 |--------------------------------------------------------------------------

@@ -52,7 +52,18 @@ return array(
 			'prefix'   => '',
 		),
 
-		'mysql' => array(
+		/*'mysql' => array(
+			'driver'    => 'mysql',
+			'host'      => 'localhost',
+			'database'  => 'keptcomp_exodus',
+			'username'  => 'keptcomp_exodus',
+			'password'  => 'H5RBL)xl-x5E',
+			'charset'   => 'utf8',
+			'collation' => 'utf8_unicode_ci',
+			'prefix'    => '',
+		),
+            */
+            		'mysql' => array(
 			'driver'    => 'mysql',
 			'host'      => 'localhost',
 			'database'  => 'kc_exodus',

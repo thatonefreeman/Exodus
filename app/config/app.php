@@ -121,7 +121,7 @@ return array(
 		'Illuminate\Validation\ValidationServiceProvider',
 		'Illuminate\View\ViewServiceProvider',
 		'Illuminate\Workbench\WorkbenchServiceProvider',
-                'KraftHaus\Bauhaus\BauhausServiceProvider',
+                'Zizaco\Confide\ServiceProvider',
                 'Intervention\Image\ImageServiceProvider'
 
 	),
@@ -190,6 +190,7 @@ return array(
 		'URL'               => 'Illuminate\Support\Facades\URL',
 		'Validator'         => 'Illuminate\Support\Facades\Validator',
 		'View'              => 'Illuminate\Support\Facades\View',
+                'Confide' => 'Zizaco\Confide\Facade'
 
 	),
 
