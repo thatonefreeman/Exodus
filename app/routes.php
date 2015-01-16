@@ -25,24 +25,8 @@ Route::get('/', function()
 /**
  * Mileage Tracker Routes
  */
-
-Route::get('/mileagetracker/', array('as'=>'mt.home',  function(){
-    
-    $mileage_tracker = new MileageTrackerService();
-    $data = MileageTrackerService::all();
-    $stats = $mileage_tracker->getStats();
-    
-    return View::make('mileagetracker/home')->with(array('entries' => $data, 'stats' => $stats));
-}));
-
-// Mileage Tracker: New Entry
-Route::get('/mileagetracker/newentry', array('as'=>'mt.newentry', 
-    function(){
-    
-    $available_vehicles = DB::table('vehicles')->orderBy('vehicle_license_plate')->lists('vehicle_make_model', 'id');
-    
-    return View::make('mileagetracker/newentry')->with('available_vehicles', $available_vehicles);
-}));
+Route::get('/mileagetracker', array('as' => 'mt.home', 'uses'=> 'MileageTracker\MileageTrackerController@home'));
+Route::get('/mileagetracker/newentry', array('as' => 'mt.newentry', 'uses'=> 'MileageTracker\MileageTrackerController@newentry'));
 
 /*
 |--------------------------------------------------------------------------

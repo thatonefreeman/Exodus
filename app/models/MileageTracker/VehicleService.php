@@ -27,7 +27,16 @@ class VehicleService extends Eloquent
      */
     public function getVehicleStats($id)
     {
-        return DB::table('mileage_tracker')->where(array('vehicle_id' => $id, 'filling_up' => 'Yes'))->count('filling_up');
+        return DB::table('mileage_tracker')
+                ->where(array('vehicle_id' => $id, 'filling_up' => 'Yes'))
+                ->count('filling_up');
+    }
+    
+    public function getAvailableVehicles()
+    {
+        return DB::table('vehicles')
+                ->orderBy('vehicle_license_plate')
+                ->lists('vehicle_make_model', 'id');        
     }
     
 }
