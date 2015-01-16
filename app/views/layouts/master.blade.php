@@ -148,21 +148,18 @@
                                 <li><a href="pages/tables/data.html"><i class="fa fa-angle-double-right"></i> Reports</a></li>
                             </ul>
                         </li>           
-                        <!--
-                        <li class="treeview">
+                        
+                        <li class="treeview {{{ Request::segment(1) == 'system' ? 'active' : ''}}}">
                             <a href="#">
-                                <i class="fa fa-table"></i> <span>Settings</span>
+                                <i class="fa fa-cog"></i> <span>System</span>
                                 <i class="fa fa-angle-left pull-right"></i>
                             </a>
                             <ul class="treeview-menu">
-                                <li><a href="pages/tables/simple.html"><i class="fa fa-angle-double-right"></i> Ticket Settings</a></li>
-                                <li><a href="pages/tables/data.html"><i class="fa fa-angle-double-right"></i> Email Templates</a></li>
-                                <li><a href="pages/tables/data.html"><i class="fa fa-angle-double-right"></i> Database Backup</a></li>
-                                <li><a href="pages/tables/data.html"><i class="fa fa-angle-double-right"></i> Ticket Signature</a></li>
-                        <li><a href="pages/tables/data.html"><i class="fa fa-angle-double-right"></i> System Settings</a></li>
+                                <li><a href="{{ URL::to('/system/database'); }}"><i class="fa fa-angle-double-right"></i> Database</a></li>
+                                <li><a href="{{ URL::to('/system/settings'); }}"><i class="fa fa-angle-double-right"></i> Settings</a></li>
                             </ul>
                         </li>
-                        -->
+                        
                     </ul>
                 </section>
                 <!-- /.sidebar -->
@@ -195,5 +192,22 @@
             $('#expense_datetime').datetimepicker();
         });    
         </script>
+        <script>
+        $(function () {
+            $('#log_datetime').datetimepicker();
+        });    
+        </script>          
+        
+        <script>
+        
+            $("#start, #finish").change(function(){
+                var start = $('#start').val();
+                var finish = $('#finish').val();
+                var difference = finish - start;
+
+                $('#distance').val(difference);
+            });
+        
+        </script>            
     </body>
 </html>

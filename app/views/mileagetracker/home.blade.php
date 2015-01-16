@@ -10,6 +10,32 @@
 <hr>
 
 <section class="content">
+    @if(Session::has('message'))
+    <div class="panel {{ Session::get('alert-class', 'panel-info')}}">
+        <div class="panel-heading">Message</div>
+        <div class="panel-body">
+            <p>{{ Session::get('message') }}</p>
+        </div>
+    </div>    
+    @endif       
+    
+    @if(count($errors) > 0)
+    <div class="panel panel-danger">
+        
+        <div class="panel-heading"><strong>Submission Errors Detected</strong></div>
+        <div class="panel-body">
+            <ul>
+            @foreach($errors->all() as $error)
+            <li> {{ $error }} </li>
+            @endforeach
+            </ul>
+        </div>
+        
+    </div>
+    @endif
+</section>
+
+<section class="content">
     <legend>Statistics</legend>
     <div class="col-md-4 col-xs-4">
         <label>Distances</label>
@@ -41,7 +67,7 @@
         <tbody>
             @foreach ($entries as $entry)
             <tr>
-                <td>{{link_to_route('mt.viewentry', $title=$entry->id, $parameters = array($entry->id), $attributes = array());}}</td>
+                <td>{{ link_to_route('mt.viewentry', $title=$entry->id, $parameters = array($entry->id), $attributes = array());}}</td>
                 <td>{{ $entry->travel_reason }}</td>
                 <td>{{ $entry->odometer_finish }}</td>
                 <td>{{ $entry->created_at }}</td>

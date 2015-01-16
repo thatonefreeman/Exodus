@@ -9,6 +9,33 @@
 </section>
 <hr>
 
+<section class="content">
+    @if(Session::has('message'))
+    <div class="panel {{ Session::get('alert-class', 'panel-info')}}">
+        <div class="panel-heading">Message</div>
+        <div class="panel-body">
+            <p>{{ Session::get('message') }}</p>
+        </div>
+    </div>    
+    @endif       
+    
+    @if(count($errors) > 0)
+    <div class="panel panel-danger">
+        
+        <div class="panel-heading"><strong>Submission Errors Detected</strong></div>
+        <div class="panel-body">
+            <ul>
+            @foreach($errors->all() as $error)
+            <li> {{ $error }} </li>
+            @endforeach
+            </ul>
+        </div>
+        
+    </div>
+    @endif
+</section>
+
+
     {{ Form::open(array('route' => 'mt.updateentry')) }}
 
     <section class="content">
@@ -32,8 +59,8 @@
                 </div>        
 
                 <div class="col-md-6 col-xs-12">
-                    <label>Created At</label>
-                    {{ Form::text('created_at', $entry->created_at, ['class' => 'form-control', 'readonly'=>'']) }}
+                    <label>Log Timestamp</label>
+                    {{ Form::text('log_datetime', $entry->log_datetime, ['class' => 'form-control', 'readonly'=>'']) }}
                 </div>
                 
                 <div class="col-md-6 col-xs-12">
@@ -123,7 +150,7 @@
                             <input type="submit" class="btn btn-flat btn-success" value="Update Log">
                         </div>
                         <div class="col-md-2 col-xs-6">
-                            <a href="#" class="btn btn-flat btn-danger">Delete Entry</a>
+                            <a href="" data-toggle="modal" data-target="#confirm-delete" class="btn btn-flat btn-danger">Delete Entry</a>
                         </div>                    
                     </div>
                 </div>            
@@ -133,5 +160,26 @@
     
     {{ Form::close() }}
 
-
+<div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                Confirm Operation
+            </div>
+            <div class="modal-body">
+                You are atempting to delete this mileage entry. Are you sure you wish to proceed?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel Deletion</button>
+                <a href="{{ URL::to('mileagetracker/deleteentry') . '/' . $entry->id }}" class="btn btn-danger danger">Delete Entry</a>
+            </div>
+        </div>
+    </div>
+</div>
+    
+<script>
+$('#confirm-delete').on('show.bs.modal', function(e) {
+    $(this).find('.danger').attr('href', $(e.relatedTarget).data('href'));
+});
+</script>
 @stop

@@ -92,7 +92,7 @@
             <legend><h3>Proof of Purchase</h3></legend>
             <div class="col-md-6 col-xs-12">
                 <label>Receipt Picture</label>
-                {{ Form::file('expense_attachment', ['class' => 'form-control', 'accept'=>'image/*', 'capture'=>'camera']) }}
+                {{ Form::file('expense_attachment', ['class' => 'form-control', 'accept'=>'image/*']) }}
             </div>  
         </div>
     </section>
@@ -123,6 +123,5 @@
     </section>
     
     {{ Form::close() }}
-
 
 @stop

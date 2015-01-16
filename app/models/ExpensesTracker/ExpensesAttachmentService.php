@@ -1,10 +1,15 @@
 <?php namespace ExpensesTracker;
 
+use Illuminate\Database\Eloquent\SoftDeletingTrait;
+
 use Eloquent;
 use DB;
 
 class ExpensesAttachmentService extends Eloquent
 {
+    
+    use SoftDeletingTrait;
+    
     protected $table = 'expenses_attachment';
     protected $fillable = array('id', 'expense_attachment_file', 'expenses_id');    
     

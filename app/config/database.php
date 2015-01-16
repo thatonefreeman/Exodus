@@ -57,7 +57,7 @@ return array(
 			'host'      => 'localhost',
 			'database'  => 'keptcomp_exodus',
 			'username'  => 'keptcomp_exodus',
-			'password'  => 'H5RBL)xl-x5E',
+			'password'  => 'pH5RBLxl-x5E',
 			'charset'   => 'utf8',
 			'collation' => 'utf8_unicode_ci',
 			'prefix'    => '',

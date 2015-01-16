@@ -124,7 +124,7 @@
                         <input type="submit" class="btn btn-flat btn-success" value="Submit Expense Report">
                     </div>
                     <div class="col-md-2 col-xs-6">
-                        <a href="#" class="btn btn-flat btn-danger">Cancel Entry</a>
+                        <a href="" data-toggle="modal" data-target="#confirm-delete" class="btn btn-flat btn-danger">Delete Entry</a>
                     </div>                    
                 </div>
             </div>
@@ -133,5 +133,27 @@
     
     {{ Form::close() }}
 
-
+<div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                Confirm Operation
+            </div>
+            <div class="modal-body">
+                You are atempting to delete this expense entry. Are you sure you wish to proceed?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel Deletion</button>
+                <a href="{{ URL::to('expensestracker/deleteentry') . '/' . $entry->id }}" class="btn btn-danger danger">Delete Entry</a>
+            </div>
+        </div>
+    </div>
+</div>
+    
+<script>
+$('#confirm-delete').on('show.bs.modal', function(e) {
+    $(this).find('.danger').attr('href', $(e.relatedTarget).data('href'));
+});
+</script>
+@stop
 @stop

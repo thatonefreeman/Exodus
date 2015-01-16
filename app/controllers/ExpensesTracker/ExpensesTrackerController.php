@@ -4,6 +4,7 @@ use View;
 use Validator;
 use Input;
 use Redirect;
+use Session;
 use ExpensesTracker\ExpensesAttachmentService;
 
 class ExpensesTrackerController extends \BaseController
@@ -21,7 +22,8 @@ class ExpensesTrackerController extends \BaseController
     public function home()
     {
         $expenses_tracker = new ExpensesService();
-        $data = ExpensesService::all();
+        
+        $data = $expenses_tracker->getAll();
        
         return View::make('expensestracker/home')->with(array('entries' => $data));
     }
@@ -137,13 +139,22 @@ class ExpensesTrackerController extends \BaseController
     /**
      * 
      */
-    public function deleteentry()
+    public function deleteentry($id)
     {
-        
+        $expenses_entry = ExpensesService::find($id);
+        $expenses_entry->delete();
+
+        if($expenses_entry->trashed() == TRUE)
+        {
+                Session::flash('message', 'Your mileage entry has been successfully removed.'); 
+                Session::flash('alert-class', 'panel-success');  
+        }else
+        {
+                Session::flash('message', 'Your mileage entry could not be removed Please try again.'); 
+                Session::flash('alert-class', 'panel-warning');  
+        }
+
+        return Redirect::route('ex.home');        
     }
-    
-    
-    
-    
-    
+   
 }

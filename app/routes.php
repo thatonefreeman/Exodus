@@ -11,17 +11,22 @@
 |
 */
 
+
+
+
+// Start Auth Group
+Route::group(array('before' => 'auth'), function(){
+    
 Route::get('/', function()
 {
     return View::make('dashboard');
 });
 
-
 /**
  * Mileage Tracker Routes
  */
 
-Route::get('/mileagetracker/', array('as'=>'mt.home', function(){
+Route::get('/mileagetracker/', array('as'=>'mt.home',  function(){
     
     $mileage_tracker = new MileageTrackerService();
     $data = MileageTrackerService::all();
@@ -31,7 +36,7 @@ Route::get('/mileagetracker/', array('as'=>'mt.home', function(){
 }));
 
 // Mileage Tracker: New Entry
-Route::get('/mileagetracker/newentry', array('as'=>'mt.newentry',
+Route::get('/mileagetracker/newentry', array('as'=>'mt.newentry', 
     function(){
     
     $available_vehicles = DB::table('vehicles')->orderBy('vehicle_license_plate')->lists('vehicle_make_model', 'id');
@@ -44,7 +49,7 @@ Route::get('/mileagetracker/newentry', array('as'=>'mt.newentry',
 | Mileage Tracker: Do New Entry
 |--------------------------------------------------------------------------
  */
-Route::post('/mileagetracker/donewentry', array('as'=>'mt.donewentry',
+Route::post('/mileagetracker/donewentry', array('as'=>'mt.donewentry', 
     function(){
     
     $validator = Validator::make(
@@ -61,6 +66,7 @@ Route::post('/mileagetracker/donewentry', array('as'=>'mt.donewentry',
             'travel_destination' => Input::get('travel_destination'),
             'travel_comments' => Input::get('travel_comments'),
             'mileage_attachement' => Input::file('mileage_attachement'),
+            'log_datetime' => Input::get('log_datetime'),
             'vehicle_id' => Input::get('vehicle_id')
             
         ),
@@ -77,16 +83,14 @@ Route::post('/mileagetracker/donewentry', array('as'=>'mt.donewentry',
             'travel_destination' => 'required', 
             'travel_comments' => '',
             'mileage_attachement' => '',
-            'vehicle_id' => 'required|numeric'
-        )
+            'vehicle_id' => 'required|numeric',
+            'log_datetime' => 'required'
+        ) 
     );
     
     if($validator->fails())
     {
-        //return View::make('mileagetracker/newentry');        
-        echo '<pre>';
-        print_r($messages = $validator->messages());
-        echo '</pre>';
+        return Redirect::back()->withInput()->withErrors($validator);
     }else
     {
         $mileage_tracker = new MileageTrackerService();
@@ -102,6 +106,7 @@ Route::post('/mileagetracker/donewentry', array('as'=>'mt.donewentry',
         $mileage_tracker->travel_destination = Input::get('travel_destination');
         $mileage_tracker->travel_comments = Input::get('travel_comments');
         $mileage_tracker->vehicle_id = Input::get('vehicle_id');
+        $mileage_tracker->log_datetime = Input::get('log_datetime');
         
         /*
          * Has an attachement been provided? If so, handle it.
@@ -116,7 +121,15 @@ Route::post('/mileagetracker/donewentry', array('as'=>'mt.donewentry',
             $mileage_tracker->mileage_attachement = '/uploads/mileagetracker/'.$filename;
         }
         
-        $mileage_tracker->save();
+        if($mileage_tracker->save())
+        {
+            Session::flash('message', 'Your mileage entry has been successfully entered.'); 
+            Session::flash('alert-class', 'panel-success');             
+        }else
+        {
+            Session::flash('message', 'There was an error when attempting to save your entry. Please try again.'); 
+            Session::flash('alert-class', 'panel-danger');             
+        }
 
         return Redirect::route('mt.newentry');
     }
@@ -127,14 +140,14 @@ Route::post('/mileagetracker/donewentry', array('as'=>'mt.donewentry',
 /**
  * Mileage Tracker: Redirect direct viewentry routes to home.
  */
-Route::get('/mileagetracker/viewentry', function(){
+Route::get('/mileagetracker/viewentry', array( function(){
     Redirect::route('mt.home');
-});
+}));
 
 /**
  * Mileage Tracker: View An Entry
  */
-Route::get('mileagetracker/viewentry/{id}', array('as'=>'mt.viewentry',
+Route::get('mileagetracker/viewentry/{id}', array('as'=>'mt.viewentry', 
     function($id){
     
     $mileage_tracker = new MileageTrackerService();
@@ -160,7 +173,52 @@ Route::get('mileagetracker/updateentry{id}', array('as' => 'mt.updateentry'), fu
  */
 Route::get('mileagetracker/vehicles', array('as' => 'mt.vehicles', function(){
 
-    return View::make('mileagetracker/vehicles');
+    $vehicle_service = new MileageTracker\VehicleService();
+    $vehicles = $vehicle_service::all();
+    
+    return View::make('mileagetracker/vehicles')->with('entries', $vehicles);
+    
+}));
+
+
+/**
+ * Mileage Tracker: Delete Entry
+ */
+Route::get('mileagetracker/deleteentry/{id}', array('as' => 'mt.deleteentry', function($id){
+
+    $mileage_entry = MileageTrackerService::find($id);
+    $mileage_entry->delete();
+    
+    if($mileage_entry->trashed() == TRUE)
+    {
+            Session::flash('message', 'Your mileage entry has been successfully removed.'); 
+            Session::flash('alert-class', 'panel-success');  
+    }else
+    {
+            Session::flash('message', 'Your mileage entry could not be removed Please try again.'); 
+            Session::flash('alert-class', 'panel-warning');  
+    }
+    
+    return Redirect::route('mt.home');
+    
+}));
+
+Route::post('mileagetracker/deleteentry/', array('as' => 'mt.deleteentry', function(){
+
+    return View::make('mileagetracker/vehicles')->with('entries', $vehicles);
+    
+}));
+
+/**
+ * Mileage Tracker: Get Vehicle Entry 
+ */
+Route::get('mileagetracker/viewvehicle/{id}', array('as' => 'mt.viewvehicle', function($id){
+
+    $vehicle_service = new MileageTracker\VehicleService();
+    $vehicles = $vehicle_service->getEntry($id);
+    $vehicle_stats = $vehicle_service->getVehicleStats($id);
+    
+    return View::make('mileagetracker/viewvehicle')->with(array('entry' => $vehicles, 'stats' => $vehicle_stats));
     
 }));
 
@@ -169,7 +227,7 @@ Route::get('mileagetracker/vehicles', array('as' => 'mt.vehicles', function(){
  * EXPENSE TRACKER ROTUES
  ******************************************************************************/
 // Home Rotue
-Route::get('/expensestracker', 'ExpensesTracker\ExpensesTrackerController@home');
+Route::get('/expensestracker', array('as' => 'ex.home', 'uses'=> 'ExpensesTracker\ExpensesTrackerController@home'));
 // New Entry Route
 Route::get('/expensestracker/newentry', 'ExpensesTracker\ExpensesTrackerController@newentry');
 // Do New Entry Route
@@ -178,12 +236,22 @@ Route::post('/expensestracker/donewentry', 'ExpensesTracker\ExpensesTrackerContr
 Route::get('/expensestracker/viewentry/{id}', array('as' => 'ex.viewentry', 'uses' => 'ExpensesTracker\ExpensesTrackerController@viewentry'));
 // Update Entry Route
 Route::post('/expensestracker/updateentry', 'ExpensesTracker\ExpensesTrackerController@updateentry');
+// Delete Entry Route
+Route::get('/expensestracker/deleteentry/{id}', 'ExpensesTracker\ExpensesTrackerController@deleteentry');
+
+ /******************************************************************************
+ * SYSTEM OPTIONS ROUTES
+ ******************************************************************************/
+Route::get('/system/database', array('uses' => 'System\DatabaseController@home'));
+
+ /******************************************************************************
+ * SUPPORT ROUTES
+ ******************************************************************************/
+Route::get('/support/events', array('uses' => 'Support\SupportController@getCurrentEvents'));
 
 
 
-
-
-
+}); // End Auth Group
 
 
 

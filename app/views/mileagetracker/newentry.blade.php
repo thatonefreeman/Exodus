@@ -9,6 +9,33 @@
 </section>
 <hr>
 
+<section class="content">
+    @if(Session::has('message'))
+    <div class="panel {{ Session::get('alert-class', 'panel-info')}}">
+        <div class="panel-heading">Message</div>
+        <div class="panel-body">
+            <p>{{ Session::get('message') }}</p>
+        </div>
+    </div>    
+    @endif       
+    
+    @if(count($errors) > 0)
+    <div class="panel panel-danger">
+        
+        <div class="panel-heading"><strong>Submission Errors Detected</strong></div>
+        <div class="panel-body">
+            <ul>
+            @foreach($errors->all() as $error)
+            <li> {{ $error }} </li>
+            @endforeach
+            </ul>
+        </div>
+        
+    </div>
+    @endif
+</section>
+
+
 
     {{ Form::open(array('route' => 'mt.donewentry', 'files'=>true)) }}
 
@@ -19,23 +46,29 @@
 
                 <div class="col-md-6 col-xs-12">
                     <label>Odometer Start</label>
-                    {{ Form::number('odometer_start','', ['class' => 'form-control']) }}
+                    {{ Form::number('odometer_start','', ['class' => 'form-control', 'id' => 'start']) }}
                 </div>
 
                 <div class="col-md-6 col-xs-12">
                     <label>Odometer Finish</label>
-                    {{ Form::number('odometer_finish','', ['class' => 'form-control']) }}
+                    {{ Form::number('odometer_finish','', ['class' => 'form-control', 'id' => 'finish']) }}
                 </div>            
 
                 <div class="col-md-6 col-xs-12">
                     <label>Distance Travelled (KM)</h3></label>
-                    {{ Form::number('distancetravelled', '', ['class' => 'form-control', 'readonly' => '']) }}
+                    {{ Form::number('distancetravelled', '', ['class' => 'form-control', 'readonly' => '', 'id' => 'distance']) }}
                 </div>        
 
                 <div class="col-md-6 col-xs-12">
-                    <label>Timestamp</label>
-                    {{ Form::text('datetime', date(DATE_RFC2822), ['class' => 'form-control', 'readonly' => '']) }}
-                </div>        
+                    <div class="form-group">
+                        <label>Log Time</label>
+                          <div class='input-group date' id='log_datetime'>
+                              <input type='text' name="log_datetime" class="form-control" readonly=""/>
+                              <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
+                              </span>
+                          </div>                 
+                    </div>                    
+                </div>      
                 
                 <div class="col-md-6 col-xs-12">
                     <label>Vehicle</label>
@@ -87,7 +120,7 @@
         <div class="row-fluid">
             <div class="col-md-12">
                 <label>Take New Image</label>
-                {{ Form::file('mileage_attachment', ['class' => 'form-control', 'accept'=>'image/*', 'capture'=>'camera']) }}
+                {{ Form::file('mileage_attachment', ['class' => 'form-control', 'accept'=>'image/*']) }}
             </div>  
         </div>
     </section>
@@ -138,6 +171,7 @@
     </section>
     
     {{ Form::close() }}
+    
 
-
+    
 @stop

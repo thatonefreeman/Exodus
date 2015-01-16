@@ -4,7 +4,7 @@
 <section class="content-header">
     <h1>
         Mileage Tracker
-        <small>Overview</small>
+        <small>Fleet Overview</small>
     </h1>
 </section>
 <hr>
@@ -18,18 +18,18 @@
     <table class="table table-bordered table-hover table-striped">
         <thead>
             <tr>
-            <td><strong>Entry ID</strong></td>
-            <td><strong>Travel Reason</strong></td>
-            <td><strong>Odometer Finish</strong></td>
+            <td><strong>Vehicle ID</strong></td>
+            <td><strong>Owner / Driver</strong></td>
+            <td><strong>Make/Model/Year</strong></td>
             <td><strong>Created At</strong></td>
             </tr>
         </thead>
         <tbody>
             @foreach ($entries as $entry)
             <tr>
-                <td>{{link_to_route('mt.viewentry', $title=$entry->id, $parameters = array($entry->id), $attributes = array());}}</td>
-                <td>{{ $entry->travel_reason }}</td>
-                <td>{{ $entry->odometer_finish }}</td>
+                <td>{{link_to_route('mt.viewvehicle', $title=$entry->vehicle_license_plate, $parameters = array($entry->id), $attributes = array());}}</td>
+                <td>{{ $entry->vehicle_owner }}</td>
+                <td>{{ $entry->vehicle_make_model }} / {{ $entry->vehicle_year }}</td>
                 <td>{{ $entry->created_at }}</td>
             </tr>
             @endforeach
