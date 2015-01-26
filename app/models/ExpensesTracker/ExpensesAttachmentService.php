@@ -26,6 +26,15 @@ class ExpensesAttachmentService extends Eloquent
                 ->first();
     }
     
+    public function getAllAttachmentsForExpense($id)
+    {
+        return DB::table('expenses_attachment as ea')
+                        ->select('ea.*')
+                        ->where('ea.expenses_id', $id)
+                        ->get();  
+    }
+    
+    
     /**
      * Handles registering expense attachments to the database
      */

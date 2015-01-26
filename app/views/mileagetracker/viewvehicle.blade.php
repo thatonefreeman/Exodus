@@ -9,6 +9,31 @@
 </section>
 <hr>
 
+@if(Session::has('message'))
+    <section class="content">
+        <div class="panel {{ Session::get('alert-class', 'panel-info')}}">
+            <div class="panel-heading">Message</div>
+            <div class="panel-body">
+                <p>{{ Session::get('message') }}</p>
+            </div>
+        </div>    
+    </section>
+@endif       
+@if(count($errors) > 0)
+    <section class="content">
+        <div class="panel panel-danger">
+            <div class="panel-heading"><strong>Submission Errors Detected</strong></div>
+            <div class="panel-body">
+                <ul>
+                @foreach($errors->all() as $error)
+                <li> {{ $error }} </li>
+                @endforeach
+                </ul>
+            </div>
+        </div>
+    </section>
+@endif
+
 <section class="content">
     <div class="row-fluid">
         <div class="col-md-6 col-xs-6">

@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>Kemptville Computers | Exodus Ticket System 1.0</title>
+        <title>Exodus Portal 1.0</title>
         <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
         <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
         <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
@@ -13,7 +13,41 @@
         {{ HTML::style('assets/css/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css'); }}
         {{ HTML::style('assets/css/AdminLTE.css'); }}
         {{ HTML::style('assets/css/bootstrap-datetimepicker.min.css'); }}
+        <link rel="apple-touch-icon" sizes="57x57" href="http://kemptvillecomputers.com/exodus/apple-touch-icon-57x57.png">
+        <link rel="apple-touch-icon" sizes="114x114" href="http://kemptvillecomputers.com/exodus/apple-touch-icon-114x114.png">
+        <link rel="apple-touch-icon" sizes="72x72" href="http://kemptvillecomputers.com/exodus/apple-touch-icon-72x72.png">
+        <link rel="apple-touch-icon" sizes="144x144" href="http://kemptvillecomputers.com/exodus/apple-touch-icon-144x144.png">
+        <link rel="apple-touch-icon" sizes="60x60" href="http://kemptvillecomputers.com/exodus/apple-touch-icon-60x60.png">
+        <link rel="apple-touch-icon" sizes="120x120" href="http://kemptvillecomputers.com/exodus/apple-touch-icon-120x120.png">
+        <link rel="apple-touch-icon" sizes="76x76" href="http://kemptvillecomputers.com/exodus/apple-touch-icon-76x76.png">
+        <link rel="apple-touch-icon" sizes="152x152" href="http://kemptvillecomputers.com/exodus/apple-touch-icon-152x152.png">
+        <link rel="apple-touch-icon" sizes="180x180" href="http://kemptvillecomputers.com/exodus/apple-touch-icon-180x180.png">
+        <link rel="shortcut icon" href="http://kemptvillecomputers.com/exodus/favicon.ico">
+        <link rel="icon" type="image/png" href="http://kemptvillecomputers.com/exodus/favicon-192x192.png" sizes="192x192">
+        <link rel="icon" type="image/png" href="http://kemptvillecomputers.com/exodus/favicon-160x160.png" sizes="160x160">
+        <link rel="icon" type="image/png" href="http://kemptvillecomputers.com/exodus/favicon-96x96.png" sizes="96x96">
+        <link rel="icon" type="image/png" href="http://kemptvillecomputers.com/exodus/favicon-16x16.png" sizes="16x16">
+        <link rel="icon" type="image/png" href="http://kemptvillecomputers.com/exodus/favicon-32x32.png" sizes="32x32">
+        <meta name="msapplication-TileColor" content="#ffffff">
+        <meta name="msapplication-TileImage" content="http://kemptvillecomputers.com/exodus/mstile-144x144.png">
+        <meta name="msapplication-config" content="http://kemptvillecomputers.com/exodus/browserconfig.xml">   
 
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+        <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js" type="text/javascript"></script>
+        <script src="//code.jquery.com/ui/1.11.1/jquery-ui.min.js" type="text/javascript"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+        {{ HTML::script('assets/js/moment.min.js'); }}
+        {{ HTML::script('assets/js/bootstrap-datetimepicker.min.js'); }}
+        {{ HTML::script('assets/js/plugins/morris/morris.min.js'); }}
+        {{ HTML::script('assets/js/plugins/sparkline/jquery.sparkline.min.js'); }}
+        {{ HTML::script('assets/js/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js'); }}
+        {{ HTML::script('assets/js/plugins/jvectormap/jquery-jvectormap-world-mill-en.js'); }}
+        {{ HTML::script('assets/js/plugins/jqueryKnob/jquery.knob.js'); }}
+        {{ HTML::script('assets/js/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js'); }}
+        {{ HTML::script('assets/js/plugins/iCheck/icheck.min.js'); }}
+        {{ HTML::script('assets/js/AdminLTE/app.js'); }}        
+        
+        
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
         <!--[if lt IE 9]>
@@ -37,6 +71,22 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </a>
+                
+                <div class="navbar-left">
+                    <ul class="nav navbar-nav">
+                        <li class="">
+                            <a href="{{ URL::to('/mileagetracker/newentry'); }}">
+                                <i class="fa fa-dashboard"></i> <span>Add Mileage</span>
+                            </a>
+                        </li>
+                        <li class="active">
+                            <a href="{{ URL::to('/expensestracker/newentry'); }}">
+                                <i class="fa fa-money"></i> <span>Add Expense</span>
+                            </a>
+                        </li>                        
+                    </ul>
+                </div>
+                
                 <div class="navbar-right">
                     <ul class="nav navbar-nav">
                         <!-- User Account: style can be found in dropdown.less -->
@@ -144,7 +194,7 @@
                             <ul class="treeview-menu">
                                 <li><a href="{{ URL::to('/expensestracker/'); }}"><i class="fa fa-angle-double-right"></i> Home</a></li>
                                 <li><a href="{{ URL::to('/expensestracker/newentry'); }}"><i class="fa fa-angle-double-right"></i> New Entry</a></li>
-                                <li><a href="{{ URL::to('/expensestracker/categories'); }}"><i class="fa fa-angle-double-right"></i> Expense Categories</a></li>
+                                <li><a href="{{ URL::to('/expensestracker/viewcategories'); }}"><i class="fa fa-angle-double-right"></i> Expense Categories</a></li>
                                 <li><a href="pages/tables/data.html"><i class="fa fa-angle-double-right"></i> Reports</a></li>
                             </ul>
                         </li>           
@@ -173,20 +223,6 @@
                 <!-- End Blade Insertions -->
             </aside>
 
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-        <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js" type="text/javascript"></script>
-        <script src="//code.jquery.com/ui/1.11.1/jquery-ui.min.js" type="text/javascript"></script>
-        <script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
-        {{ HTML::script('assets/js/moment.min.js'); }}
-        {{ HTML::script('assets/js/bootstrap-datetimepicker.min.js'); }}
-        {{ HTML::script('assets/js/plugins/morris/morris.min.js'); }}
-        {{ HTML::script('assets/js/plugins/sparkline/jquery.sparkline.min.js'); }}
-        {{ HTML::script('assets/js/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js'); }}
-        {{ HTML::script('assets/js/plugins/jvectormap/jquery-jvectormap-world-mill-en.js'); }}
-        {{ HTML::script('assets/js/plugins/jqueryKnob/jquery.knob.js'); }}
-        {{ HTML::script('assets/js/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js'); }}
-        {{ HTML::script('assets/js/plugins/iCheck/icheck.min.js'); }}
-        {{ HTML::script('assets/js/AdminLTE/app.js'); }}
         <script>
         $(function () {
             $('#expense_datetime').datetimepicker();
@@ -208,6 +244,77 @@
                 $('#distance').val(difference);
             });
         
+            
         </script>            
+        
+    <script>
+
+    $('.js-delete').click(function(event){
+     event.preventDefault();
+     $(this).deleteModel($('.js-delete').attr('data-model'), true);
+    });
+
+    $(document).ready(function(){
+        $.fn.deleteModel = function(model, ajax){
+            var o = $(this[0]);
+            if (!confirm('Are you sure you want to delete '+ model +' ?')){
+              return;
+            }     
+
+            if(ajax == true){
+             $.ajax({
+                invokedata : {obj: o},
+                type     : 'POST',
+                url      : o.attr('href'),
+                success  : function(result) {
+                     if(result === 'File deleted.'){
+                         var obj = this.invokedata.obj;
+                         obj.closest('.backup-row').fadeOut(); //you must specify the row-data class in your table row
+                     }else{
+                         alert('Couldn\'t delete '+ model +'. Please try again.');
+                     }
+                }
+             });        
+         };
+         return;
+    }});
+    </script>      
+    
+    <script>
+    mWebView.getSettings().setJavaScriptEnabled(true);
+    mWebView.setWebChromeClient(new WebChromeClient());
+    
+    $('.js-backup').click(function(event){
+     event.preventDefault();
+     $(this).backupModel('the database', true);
+    });
+
+    $(document).ready(function(){
+        $.fn.backupModel = function(model, ajax){
+            var o = $(this[0]);
+            if (!confirm('Are you sure you want to backup '+ model +' ?')){
+              return;
+            }     
+
+            if(ajax == true){
+             $.ajax({
+                invokedata : {obj: o},
+                type     : 'POST',
+                url      : o.attr('href'),
+                success  : function(result) {
+                     if(result){
+                         console.log(result);
+                         var obj = this.invokedata.obj;
+                     }else{
+                         alert('Couldn\'t backup '+ model +'. Please try again.');
+                     }
+                }
+             });        
+         };
+         return;
+        };
+    });
+    </script>      
+        
     </body>
 </html>

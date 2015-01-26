@@ -9,34 +9,32 @@
 </section>
 <hr>
 
-<section class="content">
-    @if(Session::has('message'))
-    <div class="panel {{ Session::get('alert-class', 'panel-info')}}">
-        <div class="panel-heading">Message</div>
-        <div class="panel-body">
-            <p>{{ Session::get('message') }}</p>
+@if(Session::has('message'))
+    <section class="content">
+        <div class="panel {{ Session::get('alert-class', 'panel-info')}}">
+            <div class="panel-heading">Message</div>
+            <div class="panel-body">
+                <p>{{ Session::get('message') }}</p>
+            </div>
+        </div>    
+    </section>
+@endif       
+@if(count($errors) > 0)
+    <section class="content">
+        <div class="panel panel-danger">
+            <div class="panel-heading"><strong>Submission Errors Detected</strong></div>
+            <div class="panel-body">
+                <ul>
+                @foreach($errors->all() as $error)
+                <li> {{ $error }} </li>
+                @endforeach
+                </ul>
+            </div>
         </div>
-    </div>    
-    @endif       
-    
-    @if(count($errors) > 0)
-    <div class="panel panel-danger">
-        
-        <div class="panel-heading"><strong>Submission Errors Detected</strong></div>
-        <div class="panel-body">
-            <ul>
-            @foreach($errors->all() as $error)
-            <li> {{ $error }} </li>
-            @endforeach
-            </ul>
-        </div>
-        
-    </div>
-    @endif
-</section>
+    </section>
+@endif
 
-
-    {{ Form::open(array('route' => 'mt.updateentry')) }}
+    {{ Form::open(array('url' => 'mileagetracker/updateentry/'. $entry->id, 'files'=>true)) }}
 
     <section class="content">
         <div class="col-md-6">
@@ -65,7 +63,8 @@
                 
                 <div class="col-md-6 col-xs-12">
                     <label>Vehicle</label>
-                    {{ Form::text('vehicle_id', $entry->license, ['class' => 'form-control', 'readonly'=>'']) }}
+                    {{ Form::text('', $entry->license, ['class' => 'form-control', 'readonly'=>'']) }}
+                    {{ Form::hidden('vehicle_id', $entry->vehicle_id) }}
                 </div>                  
                 
             </div>    
@@ -129,14 +128,29 @@
             </div>    
             
             <div class="row"></div>
+            
             <div class="row-fluid">
-                <legend><h3>Fuel Attachments</h3></legend>
-                <div class="col-md-3 col-xs-3">
-                    <a href="{{ URL::to($entry->mileage_attachement) }}">
-                        <img src="{{ URL::to($entry->mileage_attachement) }}" class="img-responsive"/>
-                    </a>
+                <div class='col-xs-12'>
+                    <legend><h3>Mileage Attachments</h3></legend>
+                </div>         
+                
+                @if($entry->mileage_attachement == null)
+                        <p>No mileage attachments exist for this entry. You should probably add one.</p>
+                @else  
+                <div class="col-md-12 col-xs-12">   
+                    <div class="col-md-6 col-xs-6">
+                        <a href="{{ URL::to($entry->mileage_attachement) }}">
+                            <img src="{{ URL::to($entry->mileage_attachement) }}" class="img-responsive"/>
+                        </a>
+                    </div>
                 </div>
-            </div>            
+                @endif
+
+                <div class="col-md-12 col-xs-12">
+                    <label>Add Mileage Attachment</label>
+                    {{ Form::file('mileage_attachment', ['class' => 'form-control', 'accept'=>'image/*']) }}
+                </div>                                  
+            </div>                    
         </div>
     </section>
     
@@ -150,8 +164,13 @@
                             <input type="submit" class="btn btn-flat btn-success" value="Update Log">
                         </div>
                         <div class="col-md-2 col-xs-6">
-                            <a href="" data-toggle="modal" data-target="#confirm-delete" class="btn btn-flat btn-danger">Delete Entry</a>
+                            <a href="" data-toggle="modal" data-target="#confirm-delete" class="btn btn-danger">Delete Entry</a>
                         </div>                    
+                        @if($entry->deleted_at !== NULL)
+                        <div class="col-md-2 col-xs-6">
+                            <a href="" data-toggle="modal" data-target="#confirm-restore" class="btn btn-success">Restore</a>
+                        </div>                        
+                        @endif
                     </div>
                 </div>            
             </div>
@@ -167,19 +186,46 @@
                 Confirm Operation
             </div>
             <div class="modal-body">
-                You are atempting to delete this mileage entry. Are you sure you wish to proceed?
+                @if($entry->deleted_at !== NULL)
+                    This mileage entry has already been deleted. You can forcefully remove this entry by clicking delete below. Proceed?
+                @else
+                 You are attempting to delete this mileage entry. Are you sure you wish to proceed? 
+                @endif
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel Deletion</button>
-                <a href="{{ URL::to('mileagetracker/deleteentry') . '/' . $entry->id }}" class="btn btn-danger danger">Delete Entry</a>
+                @if($entry->deleted_at !== NULL)
+                    <a href="{{ URL::to('mileagetracker/forcedeleteentry') . '/' . $entry->id }}" class="btn btn-danger danger">Delete Entry</a>
+                @else
+                    <a href="{{ URL::to('mileagetracker/deleteentry') . '/' . $entry->id }}" class="btn btn-danger danger">Delete Entry</a>
+                @endif                
+                
             </div>
         </div>
     </div>
 </div>
-    
+<div class="modal fade" id="confirm-restore" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                Confirm Operation
+            </div>
+            <div class="modal-body">
+                <p>This mileage entry has been deleted. You can restore this entry by pressing restore below. Proceed?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel Restoration</button>
+                <a href="{{ URL::to('mileagetracker/restoreentry') . '/' . $entry->id }}" class="btn btn-success success">Restore Entry</a>
+            </div>
+        </div>
+    </div>
+</div>    
 <script>
 $('#confirm-delete').on('show.bs.modal', function(e) {
     $(this).find('.danger').attr('href', $(e.relatedTarget).data('href'));
+});
+$('#confirm-restore').on('show.bs.modal', function(e) {
+    $(this).find('.restore').attr('href', $(e.relatedTarget).data('href'));
 });
 </script>
 @stop

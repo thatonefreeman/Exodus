@@ -9,33 +9,30 @@
 </section>
 <hr>
 
-<section class="content">
-    @if(Session::has('message'))
-    <div class="panel {{ Session::get('alert-class', 'panel-info')}}">
-        <div class="panel-heading">Message</div>
-        <div class="panel-body">
-            <p>{{ Session::get('message') }}</p>
+@if(Session::has('message'))
+    <section class="content">
+        <div class="panel {{ Session::get('alert-class', 'panel-info')}}">
+            <div class="panel-heading">Message</div>
+            <div class="panel-body">
+                <p>{{ Session::get('message') }}</p>
+            </div>
+        </div>    
+    </section>
+@endif       
+@if(count($errors) > 0)
+    <section class="content">
+        <div class="panel panel-danger">
+            <div class="panel-heading"><strong>Submission Errors Detected</strong></div>
+            <div class="panel-body">
+                <ul>
+                @foreach($errors->all() as $error)
+                <li> {{ $error }} </li>
+                @endforeach
+                </ul>
+            </div>
         </div>
-    </div>    
-    @endif       
-    
-    @if(count($errors) > 0)
-    <div class="panel panel-danger">
-        
-        <div class="panel-heading"><strong>Submission Errors Detected</strong></div>
-        <div class="panel-body">
-            <ul>
-            @foreach($errors->all() as $error)
-            <li> {{ $error }} </li>
-            @endforeach
-            </ul>
-        </div>
-        
-    </div>
-    @endif
-</section>
-
-
+    </section>
+@endif
 
     {{ Form::open(array('route' => 'mt.donewentry', 'files'=>true)) }}
 

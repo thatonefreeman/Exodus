@@ -52,7 +52,7 @@ return array(
 			'prefix'   => '',
 		),
 
-		/*'mysql' => array(
+		'mysql' => array(
 			'driver'    => 'mysql',
 			'host'      => 'localhost',
 			'database'  => 'keptcomp_exodus',
@@ -62,17 +62,7 @@ return array(
 			'collation' => 'utf8_unicode_ci',
 			'prefix'    => '',
 		),
-            */
-            		'mysql' => array(
-			'driver'    => 'mysql',
-			'host'      => 'localhost',
-			'database'  => 'kc_exodus',
-			'username'  => 'root',
-			'password'  => 'alpha301',
-			'charset'   => 'utf8',
-			'collation' => 'utf8_unicode_ci',
-			'prefix'    => '',
-		),
+
 
 		'pgsql' => array(
 			'driver'   => 'pgsql',

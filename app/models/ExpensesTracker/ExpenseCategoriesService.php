@@ -28,8 +28,10 @@ class ExpenseCategoriesService extends Eloquent
     
     public function getAvailableCategories()
     {
-        return DB::table('expenses_category')->orderBy('expense_category_name')->lists('expense_category_name', 'id');
+        return DB::table('expenses_category')
+                ->orderBy('expense_category_name')
+                ->where('deleted_at', null)
+                ->lists('expense_category_name', 'id');
     }
-    
     
 }

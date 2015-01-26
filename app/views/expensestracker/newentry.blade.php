@@ -9,6 +9,30 @@
 </section>
 <hr>
 
+@if(Session::has('message'))
+    <section class="content">
+        <div class="panel {{ Session::get('alert-class', 'panel-info')}}">
+            <div class="panel-heading">Message</div>
+            <div class="panel-body">
+                <p>{{ Session::get('message') }}</p>
+            </div>
+        </div>    
+    </section>
+@endif       
+@if(count($errors) > 0)
+    <section class="content">
+        <div class="panel panel-danger">
+            <div class="panel-heading"><strong>Submission Errors Detected</strong></div>
+            <div class="panel-body">
+                <ul>
+                @foreach($errors->all() as $error)
+                <li> {{ $error }} </li>
+                @endforeach
+                </ul>
+            </div>
+        </div>
+    </section>
+@endif
 
     {{ Form::open(array('url' => 'expensestracker/donewentry', 'files'=>true)) }}
     
@@ -40,7 +64,7 @@
                         <label>Purchase Date / Time</label>
                           <div class='input-group date' id='expense_datetime'>
                               <input type='text' name="expense_datetime" class="form-control" readonly=""/>
-                              <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
+                              <span class="input-group-addon bg-aqua"><span class="glyphicon glyphicon-calendar"></span>
                               </span>
                           </div>                 
                     </div>                    
@@ -62,12 +86,18 @@
                 </div>       
                 <div class="col-md-6 col-xs-12">
                     <label>Expense Subtotal (56.99)</label>
-                    {{ Form::number('expense_amount', '', ['class' => 'form-control','step' => '000.01']) }}
-                </div>                      
+
+                    <div class="input-group">
+                      {{ Form::number('expense_amount', '', ['class' => 'form-control', 'id' => 'expense_amount', 'step' => '000.01']) }}
+                        <span class="input-group-addon bg-aqua" title="Decalculate tax from total" onclick="decalculate_tax()"><span class="glyphicon glyphicon-usd" id="decalculate_tax"></span>
+                        </span>
+                    </div><!-- /input-group -->
+                </div>
                 <div class="col-md-6 col-xs-12">
                     <label>Expense Tax Amount (10.25)</label>
-                    {{ Form::number('expense_tax', '', ['class' => 'form-control', 'step' => '000.01']) }}
-                </div>                      
+                    {{ Form::number('expense_tax', '', ['class' => 'form-control', 'id' => 'expense_tax', 'step' => '000.01']) }}
+                </div>
+                    
                 <div class="col-md-6 col-xs-12">
                     <label>Payment Method</label>
                     {{ Form::select('expense_payment_type',
@@ -123,5 +153,17 @@
     </section>
     
     {{ Form::close() }}
+    
+    <script>
+        function decalculate_tax()
+        {
+            var amount          = $('#expense_amount').val();
+            var subtotal        = amount / 1.13;
+            var tax             = Math.round((amount - subtotal) * 100) / 100;
+
+            $('#expense_tax').val(tax);
+            $('#expense_amount').val((Math.round((subtotal) * 100)) / 100);
+        };
+    </script>
 
 @stop

@@ -43,27 +43,41 @@ class MileageTrackerService extends Eloquent
     {
         return DB::table('mileage_tracker as mt')
                 ->join('vehicles AS v', 'mt.vehicle_id', '=', 'v.id')
-                ->select('mt.*', 'v.vehicle_license_plate AS license')
+                ->select('mt.*', 'v.vehicle_license_plate AS license', 'v.id AS vehicle_id')
                 ->where('mt.id', $id)
-                ->where('mt.deleted_at', null)
                 ->first();
     }
     
     /**
      * Retrieve sums of rows to use in the overview page.
+     * @todo Clean this up by rewriting the queries.
      * @return array
      */
     public function getStats()
     {
         $stats = array();
-        $stats['total_entries'] = DB::table('mileage_tracker')->where('deleted_at', null)->count();
-        $stats['odometer_start_sum'] = DB::table('mileage_tracker')->where('deleted_at', null)->sum('odometer_start');
-        $stats['odometer_finish_sum'] = DB::table('mileage_tracker')->where('deleted_at', null)->sum('odometer_finish');
-        $stats['total_litres_purchased'] = DB::table('mileage_tracker')->where('deleted_at', null)->sum('litres_purchased');
-        $stats['average_fuel_price'] = DB::table('mileage_tracker')->where('filling_up', '=','Yes')->where('deleted_at', null)->avg('price_per_litre');
-        $stats['fill_ups'] = DB::table('mileage_tracker')->where('filling_up', '=', 'Yes')->where('deleted_at', null)->count('filling_up');
-                
         
+        $stats['total_entries'] = DB::table('mileage_tracker')
+                ->where('deleted_at', null)
+                ->count();
+        $stats['odometer_start_sum'] = DB::table('mileage_tracker')
+                ->where('deleted_at', null)
+                ->sum('odometer_start');
+        $stats['odometer_finish_sum'] = DB::table('mileage_tracker')
+                ->where('deleted_at', null)
+                ->sum('odometer_finish');
+        $stats['total_litres_purchased'] = DB::table('mileage_tracker')
+                ->where('deleted_at', null)
+                ->sum('litres_purchased');
+        $stats['average_fuel_price'] = DB::table('mileage_tracker')
+                ->where('filling_up', '=','Yes')
+                ->where('deleted_at', null)
+                ->avg('price_per_litre');
+        $stats['fill_ups'] = DB::table('mileage_tracker')
+                ->where('filling_up', '=', 'Yes')
+                ->where('deleted_at', null)
+                ->count('filling_up');
+                
         return $stats;
     }
     
